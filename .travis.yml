@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - 13
+
+services:
+  - docker
+
+# Pre-testing installs
+install:
+  - echo "installs? nothing to see here, move along"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests, we like our users to QA"
+
+script:
+  - docker --version
+  - docker build -t simple-node .
+  - docker tag simple-node humpynzl/udagram-api-users:latest
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push humpynzl/udagram-api-users
